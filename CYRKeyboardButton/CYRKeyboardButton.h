@@ -76,6 +76,11 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 @interface CYRKeyboardButton : UIControl
 
 /**
+ The height reduction to calculate the callout size. This is necessary in order for the callout to fit in a custom keyboard extension.
+ */
+@property (nonatomic, assign) CGFloat calloutHeightReduction;
+
+/**
  The style of the keyboard button. This determines the basic visual appearance of the keyboard.
  @discussion The style value is automatically determined during initialization but can be overriden.
  */

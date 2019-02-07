@@ -64,6 +64,7 @@
         _type = type;
         _selectedInputIndex = 0;
         
+        self.heightReduction = 0.f;
         self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = NO;
         
@@ -277,6 +278,10 @@
         
         if (selected) {
             // Draw selection background
+            if (self.button.style == CYRKeyboardButtonStylePhone) {
+                optionRect.origin.y += self.heightReduction / 2;
+                optionRect.size.height -= self.heightReduction;
+            }
             UIBezierPath *roundedRectanglePath = [UIBezierPath bezierPathWithRoundedRect:optionRect cornerRadius:4];
             
             [self.tintColor setFill];
@@ -295,7 +300,9 @@
         NSAttributedString *attributedString = [[NSAttributedString alloc]
                                                 initWithString:optionString
                                                 attributes:
-                                                @{NSFontAttributeName : self.button.inputOptionsFont, NSForegroundColorAttributeName : stringColor, NSParagraphStyleAttributeName : p}];
+                                                @{NSFontAttributeName : self.button.inputOptionsFont,
+                                                  NSForegroundColorAttributeName : stringColor,
+                                                  NSParagraphStyleAttributeName : p}];
         [attributedString drawInRect:stringRect];
     }];
     
@@ -314,6 +321,9 @@
     CGFloat majorRadius = 10.f;
     CGFloat minorRadius = 4.f;
     
+    CGFloat bubbleHeight = CGRectGetHeight(keyRect) - self.heightReduction;
+    CGFloat armHeight = CGRectGetHeight(keyRect) - self.heightReduction;
+    
     TurtleBezierPath *path = [TurtleBezierPath new];
     [path home];
     path.lineWidth = 0;
@@ -325,15 +335,15 @@
             [path rightArc:majorRadius turn:90]; // #1
             [path forward:upperWidth - 2 * majorRadius]; // #2 top
             [path rightArc:majorRadius turn:90]; // #3
-            [path forward:CGRectGetHeight(keyRect) - 2 * majorRadius + insets.top + insets.bottom]; // #4 right big
+            [path forward:bubbleHeight - 2 * majorRadius + insets.top + insets.bottom]; // #4 right big
             [path rightArc:majorRadius turn:48]; // #5
             [path forward:8.5f];
             [path leftArc:majorRadius turn:48]; // #6
-            [path forward:CGRectGetHeight(keyRect) - 8.5f + 1];
+            [path forward:armHeight - 8.5f + 1];
             [path rightArc:minorRadius turn:90];
             [path forward:lowerWidth - 2 * minorRadius]; //  lowerWidth - 2 * minorRadius + 0.5f
             [path rightArc:minorRadius turn:90];
-            [path forward:CGRectGetHeight(keyRect) - 2 * minorRadius];
+            [path forward:armHeight - 2 * minorRadius];
             [path leftArc:majorRadius turn:48];
             [path forward:8.5f];
             [path rightArc:majorRadius turn:48];
@@ -353,11 +363,11 @@
             [path rightArc:majorRadius turn:90]; // #1
             [path forward:upperWidth - 2 * majorRadius]; // #2 top
             [path rightArc:majorRadius turn:90]; // #3
-            [path forward:CGRectGetHeight(keyRect) - 2 * majorRadius + insets.top + insets.bottom]; // #4 right big
+            [path forward:bubbleHeight - 2 * majorRadius + insets.top + insets.bottom]; // #4 right big
             [path rightArc:majorRadius turn:45]; // #5
             [path forward:28]; // 6
             [path leftArc:majorRadius turn:45]; // #7
-            [path forward:CGRectGetHeight(keyRect) - 26 + (insets.left + insets.right) / 4]; // #8
+            [path forward:armHeight - 26 + (insets.left + insets.right) / 4]; // #8
             [path rightArc:minorRadius turn:90]; // 9
             [path forward:path.currentPoint.x - minorRadius]; // 10
             [path rightArc:minorRadius turn:90]; // 11
@@ -378,11 +388,11 @@
             [path rightArc:majorRadius turn:90]; // #1
             [path forward:upperWidth - 2 * majorRadius]; // #2 top
             [path rightArc:majorRadius turn:90]; // #3
-            [path forward:CGRectGetHeight(keyRect) - 2 * majorRadius + insets.top + insets.bottom]; // #4 right big
+            [path forward:bubbleHeight - 2 * majorRadius + insets.top + insets.bottom]; // #4 right big
             [path rightArc:majorRadius turn:45]; // #5
             [path forward:28]; // 6
             [path leftArc:majorRadius turn:45]; // #7
-            [path forward:CGRectGetHeight(keyRect) - 26 + (insets.left + insets.right) / 4]; // #8
+            [path forward:armHeight - 26 + (insets.left + insets.right) / 4]; // #8
             [path rightArc:minorRadius turn:90]; // 9
             [path forward:path.currentPoint.x - minorRadius]; // 10
             [path rightArc:minorRadius turn:90]; // 11
@@ -415,6 +425,9 @@
     CGFloat majorRadius = 10.f;
     CGFloat minorRadius = 4.f;
     
+    CGFloat bubbleHeight = CGRectGetHeight(keyRect) - self.heightReduction;
+    CGFloat armHeight = CGRectGetHeight(keyRect) - self.heightReduction;
+    
     TurtleBezierPath *path = [TurtleBezierPath new];
     [path home];
     path.lineWidth = 0;
@@ -431,15 +444,15 @@
                     [path rightArc:majorRadius turn:90]; // #1
                     [path forward:upperWidth - 2 * majorRadius]; // #2 top
                     [path rightArc:majorRadius turn:90]; // #3
-                    [path forward:CGRectGetHeight(keyRect) - 2 * majorRadius + insets.top + insets.bottom - 3]; // #4 right big
+                    [path forward:bubbleHeight - 2 * majorRadius + insets.top + insets.bottom - 3]; // #4 right big
                     [path rightArc:majorRadius turn:90]; // #5
                     [path forward:path.currentPoint.x - (CGRectGetWidth(keyRect) + 2 * majorRadius + 3)];
                     [path leftArc:majorRadius turn:90]; // #6
-                    [path forward:CGRectGetHeight(keyRect) - minorRadius];
+                    [path forward:armHeight - minorRadius];
                     [path rightArc:minorRadius turn:90];
                     [path forward:lowerWidth - 2 * minorRadius]; //  lowerWidth - 2 * minorRadius + 0.5f
                     [path rightArc:minorRadius turn:90];
-                    [path forward:CGRectGetHeight(keyRect) - 2 * minorRadius];
+                    [path forward:armHeight - 2 * minorRadius];
                     [path leftArc:majorRadius turn:48];
                     [path forward:8.5f];
                     [path rightArc:majorRadius turn:48];
@@ -482,17 +495,17 @@
                     [path rightArc:majorRadius turn:90]; // #1
                     [path forward:upperWidth - 2 * majorRadius]; // #2 top
                     [path rightArc:majorRadius turn:90]; // #3
-                    [path forward:CGRectGetHeight(keyRect) - 2 * majorRadius + insets.top + insets.bottom - 3]; // #4 right big
+                    [path forward:bubbleHeight - 2 * majorRadius + insets.top + insets.bottom - 3]; // #4 right big
                     
                     [path rightArc:majorRadius turn:48];
                     [path forward:8.5f];
                     [path leftArc:majorRadius turn:48];
                     
-                    [path forward:CGRectGetHeight(keyRect) - minorRadius];
+                    [path forward:armHeight - minorRadius];
                     [path rightArc:minorRadius turn:90];
                     [path forward:lowerWidth - 2 * minorRadius]; //  lowerWidth - 2 * minorRadius + 0.5f
                     [path rightArc:minorRadius turn:90];
-                    [path forward:CGRectGetHeight(keyRect) - 2 * minorRadius];
+                    [path forward:armHeight - 2 * minorRadius];
                     
                     [path leftArc:majorRadius turn:90]; // #5
                     [path forward:path.currentPoint.x - majorRadius];
@@ -542,18 +555,20 @@
     CGFloat offset = 0;
     CGFloat spacing = 0;
     
+    
     __block CGRect optionRect = CGRectZero;
     
     switch (self.button.style) {
         case CYRKeyboardButtonStylePhone:
             offset = CGRectGetWidth(keyRect);
             spacing = 6;
-            optionRect = CGRectOffset(CGRectInset(keyRect, 0, 0.5), 0, -(CGRectGetHeight(keyRect) + 15));
+            optionRect = CGRectOffset(CGRectInset(keyRect, 0, 0.5), 0, -((CGRectGetHeight(keyRect) - self.heightReduction) + 10.5));
             break;
             
         case CYRKeyboardButtonStyleTablet:
             spacing = 0;
-            optionRect = CGRectOffset(CGRectInset(keyRect, 6, 6), 0, -(CGRectGetHeight(keyRect) + 3));
+            optionRect = CGRectOffset(CGRectInset(keyRect, 6, 6), 0, -((CGRectGetHeight(keyRect) - self.heightReduction) + 3));
+            optionRect.size.height -= self.heightReduction;
             offset = CGRectGetWidth(optionRect);
             break;
             
@@ -566,7 +581,7 @@
         [inputOptionRects addObject:[NSValue valueWithCGRect:optionRect]];
         
         // Offset the option rect
-        switch (_expandedPosition) {
+        switch (self.expandedPosition) {
             case CYRKeyboardButtonPositionRight:
                 optionRect = CGRectOffset(optionRect, +(offset + spacing), 0);
                 break;

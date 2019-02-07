@@ -234,6 +234,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
         [self hideInputView];
         
         self.buttonView = [[CYRKeyboardButtonView alloc] initWithKeyboardButton:self type:CYRKeyboardButtonViewTypeInput];
+        self.buttonView.heightReduction = self.calloutHeightReduction;
         
         [self.window addSubview:self.buttonView];
     } else {
@@ -247,6 +248,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         if (self.expandedButtonView == nil) {
             CYRKeyboardButtonView *expandedButtonView = [[CYRKeyboardButtonView alloc] initWithKeyboardButton:self type:CYRKeyboardButtonViewTypeExpanded];
+            
+            expandedButtonView.heightReduction = self.calloutHeightReduction;
             
             [self.window addSubview:expandedButtonView];
             self.expandedButtonView = expandedButtonView;
