@@ -98,15 +98,15 @@
 -(CGRect)boundsForView
 {
     CGRect bounds = self.boundsWithStroke;
-    CGFloat maxWidth = MAX( fabsf( CGRectGetMinX( bounds )), fabsf( CGRectGetMaxX( bounds )));
-    CGFloat maxHeight = MAX( fabsf( CGRectGetMinY( bounds )), fabsf( CGRectGetMaxY( bounds )));
+    CGFloat maxWidth = MAX( fabs( CGRectGetMinX( bounds )), fabs( CGRectGetMaxX( bounds )));
+    CGFloat maxHeight = MAX( fabs( CGRectGetMinY( bounds )), fabs( CGRectGetMaxY( bounds )));
     
     return CGRectMake( 0.0f, 0.0f, maxWidth * 2.0f, maxHeight * 2.0f );
 }
 
 -(BOOL)isEqual:(TurtleBezierPath *)aPath
 {
-    return [[ NSKeyedArchiver archivedDataWithRootObject:self ] isEqualToData:[ NSKeyedArchiver archivedDataWithRootObject:aPath ]];
+    return [[ NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:NO error:nil ] isEqualToData:[ NSKeyedArchiver archivedDataWithRootObject:aPath  requiringSecureCoding:NO error:nil]];
 }
 
 -(void)home
