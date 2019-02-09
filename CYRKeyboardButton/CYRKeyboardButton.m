@@ -177,6 +177,11 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     _inputLabel.text = _input;
 }
 
+- (void)setInput:(NSString*)input withText:(NSString*)text {
+    self.input = input;
+    _inputLabel.text = text;
+}
+
 - (void)setInputOptions:(NSArray *)inputOptions
 {
     [self willChangeValueForKey:NSStringFromSelector(@selector(inputOptions))];

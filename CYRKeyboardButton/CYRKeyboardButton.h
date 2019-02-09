@@ -134,6 +134,11 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 @property (nonatomic, strong) NSString *input;
 
 /**
+ The string input for the keyboard button. This is the string that would be inserted upon a successful key press. Use this method if you want a different text to show on the button than the input.
+ */
+- (void)setInput:(NSString*)input withText:(NSString*)text;
+
+/**
  An array of input option strings associated with the keybonard button. The user must tap and hold the keyboard button for 0.3 seconds before the input options will be displayed.
  @discussion Input options are automatically positioned based on the keyboard buttons position within its' superview.
  */
