@@ -81,6 +81,11 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 @property (nonatomic, assign) CGFloat calloutHeightReduction;
 
 /**
+ The inset to add to the tracking area. Defaults to 0.0f
+ */
+@property (nonatomic, assign) CGFloat trackingMarginInset;
+
+/**
  The style of the keyboard button. This determines the basic visual appearance of the keyboard.
  @discussion The style value is automatically determined during initialization but can be overriden.
  */

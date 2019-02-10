@@ -106,6 +106,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     _keyShadowColor = [UIColor colorWithRed:136 / 255.f green:138 / 255.f blue:142 / 255.f alpha:1];
     _keyHighlightedColor = [UIColor colorWithRed:213/255.f green:214/255.f blue:216/255.f alpha:1];
     
+    self.trackingMarginInset = 0.f;
+    
     // Styling
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = NO;
@@ -143,6 +145,11 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     [self setNeedsDisplay];
     
     [self updateButtonPosition];
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    CGRect area = CGRectInset(self.bounds, -self.trackingMarginInset, -self.trackingMarginInset);
+    return CGRectContainsPoint(area, point);
 }
 
 #pragma mark - UIGestureRecognizerDelegate
