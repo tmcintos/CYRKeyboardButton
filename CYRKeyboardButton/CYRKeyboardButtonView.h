@@ -45,6 +45,7 @@ typedef NS_ENUM(NSUInteger, CYRKeyboardButtonViewType) {
 @property (nonatomic, readonly) CYRKeyboardButtonViewType type;
 @property (nonatomic, readonly) NSInteger selectedInputIndex;
 @property (nonatomic, assign) CGFloat heightReduction;
+@property (nonatomic, assign) BOOL useNarrowerOptionWidth;
 
 - (instancetype)initWithKeyboardButton:(CYRKeyboardButton *)button type:(CYRKeyboardButtonViewType)type;
 - (void)updateSelectedInputIndexForPoint:(CGPoint)point;

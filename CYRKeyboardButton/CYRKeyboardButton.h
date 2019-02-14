@@ -105,6 +105,8 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
  */
 @property (nonatomic, strong) UIFont *inputOptionsFont UI_APPEARANCE_SELECTOR;
 
+@property (nonatomic, assign) BOOL useNarrowerOptionWidth;
+
 /**
  The default color of the keyboard button.
  */
