@@ -270,6 +270,9 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
         if (self.expandedButtonView == nil) {
             CYRKeyboardButtonView *expandedButtonView = [[CYRKeyboardButtonView alloc] initWithKeyboardButton:self type:CYRKeyboardButtonViewTypeExpanded];
             
+            NSUInteger index = [_inputOptions indexOfObject:_input];
+            
+            [expandedButtonView selectInputAt:index != NSNotFound ? index : -1];
             expandedButtonView.heightReduction = self.calloutHeightReduction;
             expandedButtonView.useNarrowerOptionWidth = self.useNarrowerOptionWidth;
             

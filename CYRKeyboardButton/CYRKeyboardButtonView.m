@@ -62,7 +62,7 @@
     if (self) {
         _button = button;
         _type = type;
-        _selectedInputIndex = 0;
+        _selectedInputIndex = -1;
         
         self.heightReduction = 0.f;
         self.useNarrowerOptionWidth = NO;
@@ -91,6 +91,10 @@
 }
 
 #pragma mark - Public
+
+- (void)selectInputAt:(NSUInteger)index {
+    _selectedInputIndex = index;
+}
 
 - (void)updateSelectedInputIndexForPoint:(CGPoint)point
 {

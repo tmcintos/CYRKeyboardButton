@@ -49,5 +49,6 @@ typedef NS_ENUM(NSUInteger, CYRKeyboardButtonViewType) {
 
 - (instancetype)initWithKeyboardButton:(CYRKeyboardButton *)button type:(CYRKeyboardButtonViewType)type;
 - (void)updateSelectedInputIndexForPoint:(CGPoint)point;
+- (void)selectInputAt:(NSUInteger)index;
 
 @end
