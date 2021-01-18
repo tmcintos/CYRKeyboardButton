@@ -51,14 +51,7 @@
 
 - (instancetype)initWithKeyboardButton:(CYRKeyboardButton *)button type:(CYRKeyboardButtonViewType)type;
 {
-    CGRect frame = [UIScreen mainScreen].bounds;
-    
-    if (frame.size.width > frame.size.height) {
-        frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
-    }
-    
-    self = [super initWithFrame:frame];
-    
+    self = [super initWithFrame:UIScreen.mainScreen.bounds];
     if (self) {
         _button = button;
         _type = type;
