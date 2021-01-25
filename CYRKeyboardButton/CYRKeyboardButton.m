@@ -115,6 +115,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     
     self.trackingMarginInset = 0.f;
     _showShadow = YES;
+    _borderWidth = 0;
+    _borderColor = [UIColor clearColor];
     
     // Styling
     self.backgroundColor = [UIColor clearColor];

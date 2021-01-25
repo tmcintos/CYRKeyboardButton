@@ -140,6 +140,16 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 @property (nonatomic, assign) BOOL showShadow;
 
 /**
+ The border width. The default is 0.
+ */
+@property (nonatomic, assign) CGFloat borderWidth;
+
+/**
+ The border color. The default is clear.
+ */
+@property (nonatomic, strong) UIColor *borderColor;
+
+/**
  The position of the keyboard button. This is used to determine where to place the popover key views and is automatically determined when the keyboard button is added to a view and update during layout changes.
  */
 @property (nonatomic, readonly) CYRKeyboardButtonPosition position;
