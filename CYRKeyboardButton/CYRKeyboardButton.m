@@ -114,6 +114,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     _alternateInputLabelAlpha = 0.2f;
     
     self.trackingMarginInset = 0.f;
+    _showShadow = YES;
     
     // Styling
     self.backgroundColor = [UIColor clearColor];
@@ -652,7 +653,9 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     UIBezierPath *roundedRectanglePath =
     [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 1) cornerRadius:self.keyCornerRadius];
     CGContextSaveGState(context);
-    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
+    if (self.showShadow) {
+        CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
+    }
     [color setFill];
     [roundedRectanglePath fill];
     CGContextRestoreGState(context);
