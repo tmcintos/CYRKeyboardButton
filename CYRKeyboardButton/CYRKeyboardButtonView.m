@@ -153,11 +153,38 @@
         if (self.button.showShadow) {
             CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
         }
-        [self.button.keyColor setFill];
-        [bezierPath fill];
         [self.button.borderColor setStroke];
         bezierPath.lineWidth = self.button.borderWidth;
         [bezierPath stroke];
+        [bezierPath addClip];
+        
+        if (self.button.keyColor.count == 1) {
+            [self.button.keyColor[0] setFill];
+            [bezierPath fill];
+        } else {
+            if (self.button.keyColor.count < 2) {
+                return;
+            }
+                                    
+            const CGFloat *startComponents = CGColorGetComponents(self.button.keyColor[0].CGColor);
+            const CGFloat *endComponents = CGColorGetComponents(self.button.keyColor[1].CGColor);
+            
+            CGFloat colors [] = {
+                startComponents[0], startComponents[1], startComponents[2], startComponents[3],
+                endComponents[0], endComponents[1], endComponents[2], endComponents[3]
+            };
+
+            CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
+            CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
+            CGColorSpaceRelease(baseSpace), baseSpace = NULL;
+            
+            CGPoint startPoint = CGPointMake(CGRectGetMidX(bezierPath.bounds), CGRectGetMinY(bezierPath.bounds));
+            CGPoint endPoint = CGPointMake(CGRectGetMidX(bezierPath.bounds), CGRectGetMaxY(bezierPath.bounds));
+
+            CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+            CGGradientRelease(gradient), gradient = NULL;
+        }
+        
         CGContextRestoreGState(context);
     }
         
@@ -227,11 +254,38 @@
         if (self.button.showShadow) {
             CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
         }
-        [self.button.keyColor setFill];
-        [bezierPath fill];
         [self.button.borderColor setStroke];
         bezierPath.lineWidth = self.button.borderWidth;
         [bezierPath stroke];
+        [bezierPath addClip];
+        
+        if (self.button.keyColor.count == 1) {
+            [self.button.keyColor[0] setFill];
+            [bezierPath fill];
+        } else {
+            if (self.button.keyColor.count < 2) {
+                return;
+            }
+                                    
+            const CGFloat *startComponents = CGColorGetComponents(self.button.keyColor[0].CGColor);
+            const CGFloat *endComponents = CGColorGetComponents(self.button.keyColor[1].CGColor);
+            
+            CGFloat colors [] = {
+                startComponents[0], startComponents[1], startComponents[2], startComponents[3],
+                endComponents[0], endComponents[1], endComponents[2], endComponents[3]
+            };
+
+            CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
+            CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
+            CGColorSpaceRelease(baseSpace), baseSpace = NULL;
+            
+            CGPoint startPoint = CGPointMake(CGRectGetMidX(bezierPath.bounds), CGRectGetMinY(bezierPath.bounds));
+            CGPoint endPoint = CGPointMake(CGRectGetMidX(bezierPath.bounds), CGRectGetMaxY(bezierPath.bounds));
+
+            CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+            CGGradientRelease(gradient), gradient = NULL;
+        }
+        
         CGContextRestoreGState(context);
     }
         

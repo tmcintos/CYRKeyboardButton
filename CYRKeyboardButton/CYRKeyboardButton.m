@@ -106,10 +106,10 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     _alternateFont = [UIFont systemFontOfSize:13.f];
     _font = [UIFont systemFontOfSize:22.f];
     _inputOptionsFont = [UIFont systemFontOfSize:24.f];
-    _keyColor = [UIColor whiteColor];
+    _keyColor = @[[UIColor whiteColor]];
     _keyTextColor = [UIColor blackColor];
     _keyShadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.3];
-    _keyHighlightedColor = [UIColor colorWithRed:213/255.f green:214/255.f blue:216/255.f alpha:1];
+    _keyHighlightedColor = @[[UIColor colorWithRed:213/255.f green:214/255.f blue:216/255.f alpha:1]];
     _useAlternateInput = NO;
     _alternateInputLabelAlpha = 0.2f;
     
@@ -642,7 +642,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    UIColor *color = self.keyColor;
+    NSArray<UIColor *> *color = self.keyColor;
     
     if (_style == CYRKeyboardButtonStyleTablet && self.state == UIControlStateHighlighted) {
         color = self.keyHighlightedColor;
@@ -658,8 +658,35 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     if (self.showShadow) {
         CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
     }
-    [color setFill];
-    [roundedRectanglePath fill];
+    if (color.count == 1) {
+        [color[0] setFill];
+        [roundedRectanglePath fill];
+    } else {
+        if (color.count < 2) {
+            return;
+        }
+        
+        [roundedRectanglePath addClip];
+        
+        const CGFloat *startComponents = CGColorGetComponents(color[0].CGColor);
+        const CGFloat *endComponents = CGColorGetComponents(color[1].CGColor);
+        
+        CGFloat colors [] = {
+            startComponents[0], startComponents[1], startComponents[2], startComponents[3],
+            endComponents[0], endComponents[1], endComponents[2], endComponents[3]
+        };
+        
+        CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
+        CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
+        CGColorSpaceRelease(baseSpace), baseSpace = NULL;
+        
+        CGPoint startPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMinY(rect));
+        CGPoint endPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect));
+        
+        CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+        CGGradientRelease(gradient), gradient = NULL;
+    }
+    
     CGContextRestoreGState(context);
 }
 
