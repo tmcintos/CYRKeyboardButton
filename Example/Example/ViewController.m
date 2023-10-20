@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "CYRKeyboardButton.h"
+#import "NumberView.h"
 
 @interface ViewController () <UITextViewDelegate>
 
@@ -31,7 +32,7 @@
     NSArray *alts = @[@"[", @"]", @"{", @"}", @"_", @"^", @"<", @">", @"`", @"~"];
     self.keyboardButtons = [NSMutableArray arrayWithCapacity:keys.count];
 
-    self.numberView = [[UIInputView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 45) inputViewStyle:UIInputViewStyleKeyboard];
+    self.numberView = [[NumberView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 45) inputViewStyle:UIInputViewStyleKeyboard];
     
     [keys enumerateObjectsUsingBlock:^(NSString *keyString, NSUInteger idx, BOOL *stop) {
         CYRKeyboardButton *keyboardButton = [CYRKeyboardButton new];

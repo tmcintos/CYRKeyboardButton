@@ -25,6 +25,7 @@
 		37EFED88197B487E00437A0F /* TurtleBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EFED86197B487E00437A0F /* TurtleBezierPath.m */; };
 		37EFED8B197B594000437A0F /* CYRKeyboardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EFED8A197B594000437A0F /* CYRKeyboardButton.m */; };
 		37EFED8F197B596000437A0F /* CYRKeyboardButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EFED8E197B596000437A0F /* CYRKeyboardButtonView.m */; };
+		7BAEA1312AE22C7600CA1D04 /* NumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BAEA1302AE22C7600CA1D04 /* NumberView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		37EFED8A197B594000437A0F /* CYRKeyboardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYRKeyboardButton.m; sourceTree = "<group>"; };
 		37EFED8D197B596000437A0F /* CYRKeyboardButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYRKeyboardButtonView.h; sourceTree = "<group>"; };
 		37EFED8E197B596000437A0F /* CYRKeyboardButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYRKeyboardButtonView.m; sourceTree = "<group>"; };
+		7BAEA12F2AE22C7600CA1D04 /* NumberView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NumberView.h; sourceTree = "<group>"; };
+		7BAEA1302AE22C7600CA1D04 /* NumberView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumberView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +141,8 @@
 				37EFED55197B44A600437A0F /* Main.storyboard */,
 				37EFED58197B44A600437A0F /* ViewController.h */,
 				37EFED59197B44A600437A0F /* ViewController.m */,
+				7BAEA12F2AE22C7600CA1D04 /* NumberView.h */,
+				7BAEA1302AE22C7600CA1D04 /* NumberView.m */,
 				37EFED5B197B44A600437A0F /* Images.xcassets */,
 				37EFED4A197B44A600437A0F /* Supporting Files */,
 			);
@@ -308,6 +313,7 @@
 				37EFED5A197B44A600437A0F /* ViewController.m in Sources */,
 				37EFED54197B44A600437A0F /* AppDelegate.m in Sources */,
 				37EFED50197B44A600437A0F /* main.m in Sources */,
+				7BAEA1312AE22C7600CA1D04 /* NumberView.m in Sources */,
 				37EFED8B197B594000437A0F /* CYRKeyboardButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
