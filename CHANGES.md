@@ -1,6 +1,11 @@
 #CYRKeyboardButton Changelog
 
 ##0.5.x (TBD)
+(Thanks @anovoselskyi)
+* Added `keyBottomColor` and `keyBottomHighlightedColor` properties (default: nil) to allow an optional key background gradient.
+* Added `borderWidth` (default: 0.0f) and `borderColor` (default: clear) for configurable border drawing.
+* Added `showShadow` property (default: YES) to allow disabling shadow.
+* Changed default `keyShadowColor` to black (alpha: 30%).
 (Thanks @Edovia)
 * Added `alternateInput` property (default: nil). This is the string that would be inserted upon a successful pan down gesture.
 * Select the input in the options at the right index if found.
