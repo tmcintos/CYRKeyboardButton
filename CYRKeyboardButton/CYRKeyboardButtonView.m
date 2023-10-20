@@ -555,14 +555,13 @@
     CGFloat offset = 0;
     CGFloat spacing = 0;
     
-    
     __block CGRect optionRect = CGRectZero;
     
     switch (self.button.style) {
         case CYRKeyboardButtonStylePhone:
             offset = CGRectGetWidth(keyRect);
             spacing = 6;
-            optionRect = CGRectOffset(CGRectInset(keyRect, 0, 0.5), 0, -((CGRectGetHeight(keyRect) - self.heightReduction) + 10.5));
+            optionRect = CGRectOffset(CGRectInset(keyRect, 0, 0.5), 0, -((CGRectGetHeight(keyRect) - self.heightReduction) + 15));
             break;
             
         case CYRKeyboardButtonStyleTablet:
