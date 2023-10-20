@@ -199,7 +199,14 @@
         NSMutableParagraphStyle *p = [NSMutableParagraphStyle new];
         p.alignment = NSTextAlignmentCenter;
         
-        UIFont* font = [UIFont fontWithName:self.button.font.fontName size:self.button.font.pointSize * 2];
+        // use button font with 2x size and Light weight:
+        UIFontDescriptor * fontDescriptor = self.button.font.fontDescriptor;
+        NSMutableDictionary<UIFontDescriptorTraitKey, id> * fontTraits = [NSMutableDictionary<UIFontDescriptorTraitKey, id> dictionaryWithDictionary:fontDescriptor.fontAttributes[UIFontDescriptorTraitsAttribute] ?: @{}];
+        fontTraits[UIFontWeightTrait] = @(UIFontWeightLight);
+        fontDescriptor = [fontDescriptor fontDescriptorByAddingAttributes:@{
+            UIFontDescriptorTraitsAttribute : fontTraits,
+        }];
+        UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:self.button.font.pointSize * 2];
         
         NSAttributedString *attributedString = [[NSAttributedString alloc]
                                                 initWithString:inputString
