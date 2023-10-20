@@ -104,9 +104,14 @@
     return CGRectMake( 0.0f, 0.0f, maxWidth * 2.0f, maxHeight * 2.0f );
 }
 
--(BOOL)isEqual:(TurtleBezierPath *)aPath
+-(BOOL)isEqual:(id)object
 {
-    return [[ NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:NO error:nil ] isEqualToData:[ NSKeyedArchiver archivedDataWithRootObject:aPath  requiringSecureCoding:NO error:nil]];
+    if ( [object isKindOfClass:TurtleBezierPath.class] && [super isEqual:object] ) {
+        TurtleBezierPath * aPath = object;
+
+        return ( self.bearing == aPath.bearing ) && ( self.penUp == aPath.penUp );
+    }
+    return NO;
 }
 
 -(void)home
