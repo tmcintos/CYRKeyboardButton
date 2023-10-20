@@ -50,7 +50,9 @@ typedef NS_ENUM(NSUInteger, CYRKeyboardButtonStyle) {
     CYRKeyboardButtonStyleTablet
 };
 
-/** 
+NS_ASSUME_NONNULL_BEGIN
+
+/**
  Notifies observers that the keyboard button has been pressed. The affected button is stored in the object parameter of the notification. The userInfo dictionary contains the pressed key and can be accessed with the CYRKeyboardButtonKeyPressedKey key.
  */
 extern NSString *const CYRKeyboardButtonPressedNotification;
@@ -181,7 +183,7 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 /**
  The string input for the keyboard button. This is the string that would be inserted upon a successful key press. Use this method if you want a different text to show on the button than the input.
  */
-- (void)setInput:(NSString*)input withText:(NSString*)text;
+- (void)setInput:(nonnull NSString *)input withText:(nullable NSString *)text;
 
 /**
  Hides all text from the button.
@@ -192,12 +194,14 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
  An array of input option strings associated with the keybonard button. The user must tap and hold the keyboard button for 0.3 seconds before the input options will be displayed.
  @discussion Input options are automatically positioned based on the keyboard buttons position within its' superview.
  */
-@property (nonatomic, strong) NSArray *inputOptions;
+@property (nonatomic, strong, nullable) NSArray *inputOptions;
 
 /**
  An object that adopts the UITextInput protocol. When a key is pressed the key value is automatically inserted via the textInput object.
  @discussion If the textInput object is not the first responder no text will be inserted.
  */
-@property (nonatomic, weak) id<UITextInput> textInput;
+@property (nonatomic, weak, nullable) id<UITextInput> textInput;
+
+NS_ASSUME_NONNULL_END
 
 @end

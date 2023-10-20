@@ -133,7 +133,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     stackView.distribution = UIStackViewDistributionEqualSpacing;
     stackView.spacing = 0;
     stackView.alignment = UIStackViewAlignmentCenter;
-    stackView.translatesAutoresizingMaskIntoConstraints = false;
+    stackView.translatesAutoresizingMaskIntoConstraints = NO;
     stackView.userInteractionEnabled = NO;
     
     _stackView = stackView;
