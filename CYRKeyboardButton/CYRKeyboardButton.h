@@ -116,7 +116,13 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 /**
  The default color of the keyboard button.
  */
-@property (nonatomic, strong) NSArray<UIColor *> *keyColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *keyColor UI_APPEARANCE_SELECTOR;
+
+/**
+ If nonnull, the button will be filled with a linear gradient starting with `keyColor` at the top center and ending with this color at the bottom center.
+ The default value is `nil`.
+ */
+@property (nonatomic, strong, nullable) UIColor *keyBottomColor UI_APPEARANCE_SELECTOR;
 
 /**
  The text color of the keyboard button.
@@ -132,7 +138,13 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 /**
  The highlighted background color of the keyboard button.
  */
-@property (nonatomic, strong) NSArray<UIColor *> *keyHighlightedColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *keyHighlightedColor UI_APPEARANCE_SELECTOR;
+
+/**
+ If not `nil`, when highlighted, the button will be filled with a linear gradient starting with `keyHighligtedColor` at the top center and ending with this color at the bottom center.
+ The default value is `nil`.
+ */
+@property (nonatomic, strong, nullable) UIColor *keyBottomHighlightedColor UI_APPEARANCE_SELECTOR;
 
 /**
  Should show shadow. The defaults is YES.

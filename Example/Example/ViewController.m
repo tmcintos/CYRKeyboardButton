@@ -40,8 +40,12 @@
         keyboardButton.input = keyString;
         keyboardButton.inputOptions = @[@"A", @"B", @"C", @"D"];
         keyboardButton.textInput = self.textView;
+        if ( [keyString isEqualToString:@"0"] ) {
+            keyboardButton.keyColor = UIColor.systemGray3Color;
+            keyboardButton.keyBottomColor = UIColor.systemGrayColor;
+            keyboardButton.keyTextColor = UIColor.whiteColor;
+        }
         [self.numberView addSubview:keyboardButton];
-        
         [self.keyboardButtons addObject:keyboardButton];
     }];
     

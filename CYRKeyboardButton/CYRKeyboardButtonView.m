@@ -156,26 +156,18 @@
         [self.button.borderColor setStroke];
         bezierPath.lineWidth = self.button.borderWidth;
         [bezierPath stroke];
-        [bezierPath addClip];
         
-        if (self.button.keyColor.count == 1) {
-            [self.button.keyColor[0] setFill];
+        UIColor* color = self.button.keyColor;
+        UIColor* bottomColor = self.button.keyBottomColor;
+        if (!bottomColor) {
+            [color setFill];
             [bezierPath fill];
         } else {
-            if (self.button.keyColor.count < 2) {
-                return;
-            }
-                                    
-            const CGFloat *startComponents = CGColorGetComponents(self.button.keyColor[0].CGColor);
-            const CGFloat *endComponents = CGColorGetComponents(self.button.keyColor[1].CGColor);
+            [bezierPath addClip];
             
-            CGFloat colors [] = {
-                startComponents[0], startComponents[1], startComponents[2], startComponents[3],
-                endComponents[0], endComponents[1], endComponents[2], endComponents[3]
-            };
-
             CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
-            CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
+            NSArray * colors = @[ (__bridge id)color.CGColor, (__bridge id)bottomColor.CGColor ];
+            CGGradientRef gradient = CGGradientCreateWithColors(baseSpace, (__bridge CFArrayRef)colors, NULL);
             CGColorSpaceRelease(baseSpace), baseSpace = NULL;
             
             CGPoint startPoint = CGPointMake(CGRectGetMidX(bezierPath.bounds), CGRectGetMinY(bezierPath.bounds));
@@ -257,26 +249,18 @@
         [self.button.borderColor setStroke];
         bezierPath.lineWidth = self.button.borderWidth;
         [bezierPath stroke];
-        [bezierPath addClip];
         
-        if (self.button.keyColor.count == 1) {
-            [self.button.keyColor[0] setFill];
+        UIColor* color = self.button.keyColor;
+        UIColor* bottomColor = self.button.keyBottomColor;
+        if (!bottomColor) {
+            [color setFill];
             [bezierPath fill];
         } else {
-            if (self.button.keyColor.count < 2) {
-                return;
-            }
-                                    
-            const CGFloat *startComponents = CGColorGetComponents(self.button.keyColor[0].CGColor);
-            const CGFloat *endComponents = CGColorGetComponents(self.button.keyColor[1].CGColor);
+            [bezierPath addClip];
             
-            CGFloat colors [] = {
-                startComponents[0], startComponents[1], startComponents[2], startComponents[3],
-                endComponents[0], endComponents[1], endComponents[2], endComponents[3]
-            };
-
             CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
-            CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
+            NSArray * colors = @[ (__bridge id)color.CGColor, (__bridge id)bottomColor.CGColor ];
+            CGGradientRef gradient = CGGradientCreateWithColors(baseSpace, (__bridge CFArrayRef)colors, NULL);
             CGColorSpaceRelease(baseSpace), baseSpace = NULL;
             
             CGPoint startPoint = CGPointMake(CGRectGetMidX(bezierPath.bounds), CGRectGetMinY(bezierPath.bounds));
