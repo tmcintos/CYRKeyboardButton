@@ -84,7 +84,7 @@
     [self.numberView removeConstraints:self.numberView.constraints];
     
     // Create our constraints
-    NSMutableDictionary *bindings = [NSMutableDictionary dictionary];
+    NSMutableDictionary *views = [NSMutableDictionary dictionary];
     NSMutableString *visualFormatConstants = [NSMutableString string];
     NSDictionary *metrics = nil;
     
@@ -103,25 +103,25 @@
     
     // Build the visual format string
     [self.keyboardButtons enumerateObjectsUsingBlock:^(CYRKeyboardButton *button, NSUInteger idx, BOOL *stop) {
-        NSString *binding = [NSString stringWithFormat:@"keyboardButton%lu", (unsigned long)idx];
-        [bindings setObject:button forKey:binding];
+        NSString *viewName = [NSString stringWithFormat:@"keyboardButton%lu", (unsigned long)idx];
+        [views setObject:button forKey:viewName];
         
         if (idx == 0) {
-            [visualFormatConstants appendString:[NSString stringWithFormat:@"H:|-margin-[%@]", binding]];
+            [visualFormatConstants appendString:[NSString stringWithFormat:@"H:|-margin-[%@]", viewName]];
         } else if (idx < self.keyboardButtons.count - 1) {
-            [visualFormatConstants appendString:[NSString stringWithFormat:@"-spacing-[%@]", binding]];
+            [visualFormatConstants appendString:[NSString stringWithFormat:@"-spacing-[%@]", viewName]];
         } else {
-            [visualFormatConstants appendString:[NSString stringWithFormat:@"-spacing-[%@]-margin-|", binding]];
+            [visualFormatConstants appendString:[NSString stringWithFormat:@"-spacing-[%@]-margin-|", viewName]];
         }
     }];
     
     // Apply horizontal constraints
-    [self.numberView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:visualFormatConstants options:0 metrics:metrics views:bindings]];
+    [self.numberView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:visualFormatConstants options:0 metrics:metrics views:views]];
     
     // Apply vertical constraints
-    [bindings enumerateKeysAndObjectsUsingBlock:^(NSString *binding, id obj, BOOL *stop) {
-        NSString *format = [NSString stringWithFormat:@"V:|-6-[%@]|", binding];
-        [self.numberView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:0 metrics:nil views:bindings]];
+    [views enumerateKeysAndObjectsUsingBlock:^(NSString *viewName, id obj, BOOL *stop) {
+        NSString *format = [NSString stringWithFormat:@"V:|-6-[%@]|", viewName];
+        [self.numberView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:0 metrics:nil views:views]];
     }];
     
     // Add width constraint
