@@ -28,6 +28,7 @@
 
     // Our keyboard keys
     NSArray *keys = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"0"];
+    NSArray *alts = @[@"[", @"]", @"{", @"}", @"_", @"^", @"<", @">", @"`", @"~"];
     self.keyboardButtons = [NSMutableArray arrayWithCapacity:keys.count];
 
     self.numberView = [[UIInputView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 45) inputViewStyle:UIInputViewStyleKeyboard];
@@ -35,6 +36,7 @@
     [keys enumerateObjectsUsingBlock:^(NSString *keyString, NSUInteger idx, BOOL *stop) {
         CYRKeyboardButton *keyboardButton = [CYRKeyboardButton new];
         keyboardButton.translatesAutoresizingMaskIntoConstraints = NO;
+        keyboardButton.alternateInput = alts[idx];
         keyboardButton.input = keyString;
         keyboardButton.inputOptions = @[@"A", @"B", @"C", @"D"];
         keyboardButton.textInput = self.textView;
