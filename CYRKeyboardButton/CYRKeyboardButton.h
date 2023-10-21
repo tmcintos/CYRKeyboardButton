@@ -95,6 +95,12 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 // Styling
 
 /**
+ The font associated with the keyboard button alternate input.
+ @discussion This font only affects the keyboard button's standard view.
+ */
+@property (nonatomic, strong) UIFont *alternateFont UI_APPEARANCE_SELECTOR;
+
+/**
  The font associated with the keyboard button.
  @discussion This font only affects the keyboard button's standard view.
  */
@@ -141,9 +147,19 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
 @property (nonatomic, strong) NSString *input;
 
 /**
+ The alternate string input for the keyboard button. This is the string that would be inserted upon a successful pan down gesture.
+ */
+@property (nonatomic, strong, nullable) NSString *alternateInput;
+
+/**
  The string input for the keyboard button. This is the string that would be inserted upon a successful key press. Use this method if you want a different text to show on the button than the input.
  */
 - (void)setInput:(NSString*)input withText:(NSString*)text;
+
+/**
+ Hides all text from the button.
+ */
+- (void)enableTrackpadMode:(BOOL)enable;
 
 /**
  An array of input option strings associated with the keybonard button. The user must tap and hold the keyboard button for 0.3 seconds before the input options will be displayed.

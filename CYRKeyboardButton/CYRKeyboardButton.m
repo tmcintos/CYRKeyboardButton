@@ -43,11 +43,15 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 
 @interface CYRKeyboardButton () <UIGestureRecognizerDelegate>
 
+@property (nonatomic, strong) UIStackView* stackView;
+@property (nonatomic, strong) UILabel *alternateInputLabel;
 @property (nonatomic, strong) UILabel *inputLabel;
 @property (nonatomic, strong) CYRKeyboardButtonView *buttonView;
 @property (nonatomic, strong) CYRKeyboardButtonView *expandedButtonView;
 
 @property (nonatomic, assign) CYRKeyboardButtonPosition position;
+@property (nonatomic, assign) BOOL useAlternateInput;
+@property (nonatomic, assign) CGFloat alternateInputLabelAlpha;
 
 @property (nonatomic, assign) NSTimeInterval lastTouchDown;
 
@@ -99,12 +103,15 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     }
     
     // Default appearance
+    _alternateFont = [UIFont systemFontOfSize:13.f];
     _font = [UIFont systemFontOfSize:22.f];
     _inputOptionsFont = [UIFont systemFontOfSize:24.f];
     _keyColor = [UIColor whiteColor];
     _keyTextColor = [UIColor blackColor];
     _keyShadowColor = [UIColor colorWithRed:136 / 255.f green:138 / 255.f blue:142 / 255.f alpha:1];
     _keyHighlightedColor = [UIColor colorWithRed:213/255.f green:214/255.f blue:216/255.f alpha:1];
+    _useAlternateInput = NO;
+    _alternateInputLabelAlpha = 0.2f;
     
     self.trackingMarginInset = 0.f;
     
@@ -118,8 +125,37 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     [self addTarget:self action:@selector(handleTouchDown) forControlEvents:UIControlEventTouchDown];
     [self addTarget:self action:@selector(handleTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     
+    UIStackView* stackView = [[UIStackView alloc] initWithFrame:self.bounds];
+    stackView.axis = UILayoutConstraintAxisVertical;
+    stackView.distribution = UIStackViewDistributionEqualSpacing;
+    stackView.spacing = 0;
+    stackView.alignment = UIStackViewAlignmentCenter;
+    stackView.translatesAutoresizingMaskIntoConstraints = false;
+    stackView.userInteractionEnabled = NO;
+    
+    _stackView = stackView;
+    [self addSubview:_stackView];
+    
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_stackView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_stackView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+    
+    if (_style == CYRKeyboardButtonStyleTablet) {
+        // Input label
+        UILabel *alternateInputLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        alternateInputLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        alternateInputLabel.textAlignment = NSTextAlignmentCenter;
+        alternateInputLabel.backgroundColor = [UIColor clearColor];
+        alternateInputLabel.userInteractionEnabled = NO;
+        alternateInputLabel.textColor = _keyTextColor;
+        alternateInputLabel.alpha = _alternateInputLabelAlpha;
+        alternateInputLabel.font = _alternateFont;
+
+        _alternateInputLabel = alternateInputLabel;
+        [_stackView addArrangedSubview:_alternateInputLabel];
+    }
+    
     // Input label
-    UILabel *inputLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
+    UILabel *inputLabel = [[UILabel alloc] initWithFrame:self.bounds];
     inputLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     inputLabel.textAlignment = NSTextAlignmentCenter;
     inputLabel.backgroundColor = [UIColor clearColor];
@@ -127,8 +163,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     inputLabel.textColor = _keyTextColor;
     inputLabel.font = _font;
     
-    [self addSubview:inputLabel];
     _inputLabel = inputLabel;
+    [_stackView addArrangedSubview:_inputLabel];
     
     [self updateDisplayStyle];
 }
@@ -165,14 +201,25 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 
 - (NSString *)description
 {
-    NSString *description = [NSString stringWithFormat:@"<%@ %p>; frame = %@; input = %@; inputOptions = %@",
+    NSString *description = [NSString stringWithFormat:@"<%@ %p>; frame = %@; input = %@;%@ inputOptions = %@",
                              NSStringFromClass([self class]),
                              self,
                              NSStringFromCGRect(self.frame),
                              self.input,
+                             self.alternateInput ? [NSString stringWithFormat:@" alt = %@;", self.alternateInput] : @"",
                              self.inputOptions];
     
     return description;
+}
+
+- (void)setAlternateInput:(NSString *)alternateInput {
+    [self willChangeValueForKey:NSStringFromSelector(@selector(alternateInput))];
+    _alternateInput = alternateInput;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(alternateInput))];
+    
+    _alternateInputLabel.text = alternateInput;
+    [_alternateInputLabel sizeToFit];
+    [self setupInputOptionsConfiguration];
 }
 
 - (void)setInput:(NSString *)input
@@ -182,11 +229,18 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     [self didChangeValueForKey:NSStringFromSelector(@selector(input))];
     
     _inputLabel.text = _input;
+    [_inputLabel sizeToFit];
 }
 
 - (void)setInput:(NSString*)input withText:(NSString*)text {
     self.input = input;
     _inputLabel.text = text;
+    [_inputLabel sizeToFit];
+}
+
+- (void)enableTrackpadMode:(BOOL)enable {
+    _inputLabel.alpha = enable ? 0 : 1.f;
+    _alternateInputLabel.alpha = enable ? 0 : _alternateInputLabelAlpha;
 }
 
 - (void)setInputOptions:(NSArray *)inputOptions
@@ -195,11 +249,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     _inputOptions = inputOptions;
     [self didChangeValueForKey:NSStringFromSelector(@selector(inputOptions))];
     
-    if (_inputOptions.count > 0) {
-        [self setupInputOptionsConfiguration];
-    } else {
-        [self tearDownInputOptionsConfiguration];
-    }
+    [self setupInputOptionsConfiguration];
 }
 
 - (void)setStyle:(CYRKeyboardButtonStyle)style
@@ -219,6 +269,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
         [self didChangeValueForKey:NSStringFromSelector(@selector(keyTextColor))];
         
         _inputLabel.textColor = keyTextColor;
+        _alternateInputLabel.textColor = keyTextColor;
     }
 }
 
@@ -230,6 +281,17 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
         [self didChangeValueForKey:NSStringFromSelector(@selector(font))];
         
         _inputLabel.font = font;
+    }
+}
+
+- (void)setAlternateFont:(UIFont *)alternateFont
+{
+    if (_alternateFont != alternateFont) {
+        [self willChangeValueForKey:NSStringFromSelector(@selector(font))];
+        _alternateFont = alternateFont;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(font))];
+        
+        _alternateInputLabel.font = _alternateFont;
     }
 }
 
@@ -395,18 +457,19 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 {
     [self tearDownInputOptionsConfiguration];
     
-    if (self.inputOptions.count > 0) {
-        UILongPressGestureRecognizer *longPressGestureRecognizer =
-        [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showExpandedInputView:)];
-        longPressGestureRecognizer.minimumPressDuration = 0.3;
-        longPressGestureRecognizer.delegate = self;
-        
-        [self addGestureRecognizer:longPressGestureRecognizer];
-        self.optionsViewRecognizer = longPressGestureRecognizer;
-        
+    if (self.inputOptions.count > 0 || self.alternateInput != nil) {
+        if (self.inputOptions.count > 0) {
+            UILongPressGestureRecognizer *longPressGestureRecognizer =
+            [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showExpandedInputView:)];
+            longPressGestureRecognizer.minimumPressDuration = _style == CYRKeyboardButtonStyleTablet ? 0.5 : 0.3;
+            longPressGestureRecognizer.delegate = self;
+            
+            [self addGestureRecognizer:longPressGestureRecognizer];
+            self.optionsViewRecognizer = longPressGestureRecognizer;
+        }
         UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_handlePanning:)];
         panGestureRecognizer.delegate = self;
-        
+
         [self addGestureRecognizer:panGestureRecognizer];
         self.panGestureRecognizer = panGestureRecognizer;
     }
@@ -420,18 +483,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 
 #pragma mark - Touch Actions
 
-- (void)handleTouchDown
-{
-    self.lastTouchDown = [[NSDate date] timeIntervalSince1970];
-
-    [[UIDevice currentDevice] playInputClick];
-    
-    [self showInputView];
-}
-
-- (void)handleTouchUpInside
-{
-    [self insertText:self.input];
+- (void)handleInput:(NSString*)input {
+    [self insertText:input];
     
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
     float delay = kMinimumInputViewShowingTime;
@@ -442,8 +495,20 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     else {
         self.highlighted = YES;
     }
-
+    
     [self performSelector:@selector(hideInputAndExpandedViews) withObject:nil afterDelay:delay];
+}
+
+- (void)handleTouchDown
+{
+    self.lastTouchDown = [[NSDate date] timeIntervalSince1970];
+    [UIDevice.currentDevice playInputClick];
+    [self showInputView];
+}
+
+- (void)handleTouchUpInside
+{
+    [self handleInput:self.input];
 }
 
 - (void)hideInputAndExpandedViews
@@ -457,16 +522,87 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 - (void)_handlePanning:(UIPanGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled) {
-        if (self.expandedButtonView.selectedInputIndex != NSNotFound) {
+        if (self.expandedButtonView && self.expandedButtonView.selectedInputIndex != NSNotFound) {
             NSString *inputOption = self.inputOptions[self.expandedButtonView.selectedInputIndex];
             
             [self insertText:inputOption];
         }
+        else if (self.alternateInput) {
+            [self handleInput:_useAlternateInput ? self.alternateInput : self.input];
+        }
+        else if (!self.expandedButtonView.selectedInputIndex || self.expandedButtonView.selectedInputIndex == NSNotFound) {
+            [self handleInput:self.input];
+        }
+        
+        // Animate back the input labels back to their default states
+        [UIView animateWithDuration:0.25f animations:^{
+            self.alternateInputLabel.font = self.alternateFont;
+            self.alternateInputLabel.alpha = self.alternateInputLabelAlpha;
+            self.inputLabel.font = self.font;
+            self.inputLabel.alpha = 1.f;
+        }];
         
         [self hideExpandedInputView];
     } else {
-        CGPoint location = [recognizer locationInView:self.superview];
-        [self.expandedButtonView updateSelectedInputIndexForPoint:location];
+        BOOL updateExpandedView = YES;
+        
+        if (self.alternateInput) {
+            BOOL locationInOptions = CGRectContainsPoint(self.expandedButtonView.bounds, [recognizer locationInView:self.expandedButtonView]);
+            _useAlternateInput = NO;
+            
+            // Default values
+            CGPoint velocity = [recognizer velocityInView:self];
+            UIFont* alternateInputFont = _alternateFont;
+            UIFont* inputFont = _font;
+            CGFloat alternateInputAlpha = _alternateInputLabelAlpha;
+            CGFloat inputAlpha = 1.f;
+            
+            if (velocity.y > 0)
+            {
+                updateExpandedView = locationInOptions;
+                
+                if (!locationInOptions) {
+                    alternateInputFont = [UIFont systemFontOfSize:MIN(_alternateInputLabel.font.pointSize + 1.5, _font.pointSize)];
+                    inputFont = [UIFont systemFontOfSize:MAX(_inputLabel.font.pointSize - 1.5, 0)];
+                    
+                    alternateInputAlpha = alternateInputFont.pointSize / self.font.pointSize;
+                    inputAlpha = inputFont.pointSize / self.font.pointSize;
+                    
+                    CGPoint location = [recognizer locationInView:self];
+                    
+                    if (location.y >= self.bounds.size.height) {
+                        _useAlternateInput = YES;
+                    }
+                    [self setHighlighted:YES];
+                }
+            }
+            else if (velocity.y < 0) {
+                if (!locationInOptions) {
+                    alternateInputFont = [UIFont systemFontOfSize:MAX(_alternateInputLabel.font.pointSize - 1.5, _alternateFont.pointSize)];
+                    inputFont = [UIFont systemFontOfSize:MIN(_inputLabel.font.pointSize + 1.5, _font.pointSize)];
+                    
+                    alternateInputAlpha = alternateInputFont.pointSize / self.font.pointSize;
+                    inputAlpha = inputFont.pointSize / self.font.pointSize;
+                    [self setHighlighted:YES];
+                }
+            }
+            
+            // Animate the input labels for the vertical swipe
+            [UIView animateWithDuration:0 animations:^{
+                self.alternateInputLabel.font = alternateInputFont;
+                self.alternateInputLabel.alpha = alternateInputAlpha;
+                self.inputLabel.font = inputFont;
+                self.inputLabel.alpha = inputAlpha;
+            }];
+        }
+        
+        if (updateExpandedView) {
+            CGPoint location = [recognizer locationInView:self.superview];
+            [self.expandedButtonView updateSelectedInputIndexForPoint:location];
+        }
+        else {
+            [self hideExpandedInputView];
+        }
     };
 }
 
