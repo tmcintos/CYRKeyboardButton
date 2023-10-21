@@ -42,7 +42,7 @@
         keyboardButton.alternateInput = alts[idx];
         keyboardButton.input = keyString;
         keyboardButton.inputOptions = @[@"A", @"B", @"C", @"D"];
-        keyboardButton.textInput = self.textView;
+        keyboardButton.keyInput = self.textView;
         if ( [keyString isEqualToString:@"0"] ) {
             keyboardButton.keyColor = UIColor.systemGray3Color;
             keyboardButton.keyBottomColor = UIColor.systemGrayColor;
@@ -57,7 +57,7 @@
         keyboardButton.translatesAutoresizingMaskIntoConstraints = NO;
         keyboardButton.alternateInput = @"|";
         keyboardButton.input = @"\\";
-        keyboardButton.textInput = self.textView;
+        keyboardButton.keyInput = self.textView;
         [self.numberView addSubview:keyboardButton];
         [self.keyboardButtons addObject:keyboardButton];
     }

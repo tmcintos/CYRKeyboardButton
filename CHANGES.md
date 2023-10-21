@@ -1,6 +1,7 @@
 #CYRKeyboardButton Changelog
 
 ##0.5.x (TBD)
+* Added `keyInput` property and deprecated `textInput` property in order to allow operation with receivers conforming to UIKeyInput but not UITextInput.
 (Thanks @anovoselskyi)
 * Added `keyBottomColor` and `keyBottomHighlightedColor` properties (default: nil) to allow an optional key background gradient.
 * Added `borderWidth` (default: 0.0f) and `borderColor` (default: clear) for configurable border drawing.
