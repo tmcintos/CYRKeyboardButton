@@ -32,7 +32,9 @@
     NSArray *alts = @[@"[", @"]", @"{", @"}", @"_", @"^", @"<", @">", @"`", @"~"];
     self.keyboardButtons = [NSMutableArray arrayWithCapacity:keys.count];
 
-    self.numberView = [[NumberView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 45) inputViewStyle:UIInputViewStyleKeyboard];
+    self.numberView = [[NumberView alloc] initWithFrame:CGRectZero inputViewStyle:UIInputViewStyleKeyboard];
+    self.numberView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.numberView.allowsSelfSizing = YES;
     
     [keys enumerateObjectsUsingBlock:^(NSString *keyString, NSUInteger idx, BOOL *stop) {
         CYRKeyboardButton *keyboardButton = [CYRKeyboardButton new];
@@ -50,7 +52,17 @@
         [self.keyboardButtons addObject:keyboardButton];
     }];
     
-    [self updateConstraintsForOrientation:self.interfaceOrientation];
+    if ( UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPhone ) {
+        CYRKeyboardButton *keyboardButton = [CYRKeyboardButton new];
+        keyboardButton.translatesAutoresizingMaskIntoConstraints = NO;
+        keyboardButton.alternateInput = @"|";
+        keyboardButton.input = @"\\";
+        keyboardButton.textInput = self.textView;
+        [self.numberView addSubview:keyboardButton];
+        [self.keyboardButtons addObject:keyboardButton];
+    }
+
+    [self updateConstraintsForInterfaceSize:self.view.frame.size];
     self.textView.inputAccessoryView = self.numberView;
     
     // Subscribe to keyboard notifications
@@ -66,9 +78,11 @@
     
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [self updateConstraintsForOrientation:toInterfaceOrientation];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
+    [self updateConstraintsForInterfaceSize:size];
 }
 
 - (void)dealloc
@@ -78,7 +92,7 @@
 
 #pragma mark - Constraint Management
 
-- (void)updateConstraintsForOrientation:(UIInterfaceOrientation)orientation
+- (void)updateConstraintsForInterfaceSize:(CGSize)size
 {
     // Remove any existing constraints
     [self.numberView removeConstraints:self.numberView.constraints];
@@ -87,18 +101,41 @@
     NSMutableDictionary *views = [NSMutableDictionary dictionary];
     NSMutableString *visualFormatConstants = [NSMutableString string];
     NSDictionary *metrics = nil;
+    BOOL isPortrait = size.height >= size.width;
     
-    // Setup our metrics based on orientation
-    if (UIInterfaceOrientationIsPortrait(orientation)) {
-        metrics = @{
-                    @"margin" : @(3),
-                    @"spacing" : @(6)
-                    };
-    } else {
-        metrics = @{
-                    @"margin" : @(22),
-                    @"spacing" : @(5)
-                    };
+    // Setup our metrics based on idiom & orientation
+    switch (UIDevice.currentDevice.userInterfaceIdiom) {
+    case UIUserInterfaceIdiomPhone:
+        if ( isPortrait ) {
+            metrics = @{
+                @"height" : @(45),
+                @"margin" : @(3),
+                @"spacing" : @(6)
+            };
+        } else {
+            metrics = @{
+                @"height" : @(38),
+                @"margin" : @(3),
+                @"spacing" : @(5)
+            };
+        }
+        break;
+    case UIUserInterfaceIdiomPad:
+    default:
+        if ( isPortrait ) {
+            metrics = @{
+                @"height" : @(64),
+                @"margin" : @(6),
+                @"spacing" : @(12)
+            };
+        } else {
+            metrics = @{
+                @"height" : @(82),
+                @"margin" : @(7),
+                @"spacing" : @(14)
+            };
+        }
+        break;
     }
     
     // Build the visual format string
@@ -124,6 +161,9 @@
         [self.numberView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:0 metrics:nil views:views]];
     }];
     
+    // Add height constraint
+    [self.numberView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[accessoryView(==height)]" options:0 metrics:metrics views:@{ @"accessoryView" : self.numberView }]];
+ 
     // Add width constraint
     [self.keyboardButtons enumerateObjectsUsingBlock:^(CYRKeyboardButton *button, NSUInteger idx, BOOL *stop) {
         if (idx > 0) {
