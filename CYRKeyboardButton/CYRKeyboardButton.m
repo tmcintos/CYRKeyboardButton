@@ -575,7 +575,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     } else {
         BOOL updateExpandedView = YES;
         
-        if (self.alternateInput) {
+        if (_alternateInputLabel) {
             BOOL locationInOptions = CGRectContainsPoint(self.expandedButtonView.bounds, [recognizer locationInView:self.expandedButtonView]);
             _useAlternateInput = NO;
             
@@ -586,11 +586,11 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
             CGFloat alternateInputAlpha = _alternateInputLabelAlpha;
             CGFloat inputAlpha = 1.f;
             
-            if (velocity.y > 0)
-            {
-                updateExpandedView = locationInOptions;
-                
-                if (!locationInOptions) {
+            if ( ! locationInOptions ) {
+                if (velocity.y > 0)
+                {
+                    updateExpandedView = NO;
+                    
                     alternateInputFont = [UIFont systemFontOfSize:MIN(_alternateInputLabel.font.pointSize + 1.5, _font.pointSize)];
                     inputFont = [UIFont systemFontOfSize:MAX(_inputLabel.font.pointSize - 1.5, 0)];
                     
@@ -604,9 +604,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
                     }
                     [self setHighlighted:YES];
                 }
-            }
-            else if (velocity.y < 0) {
-                if (!locationInOptions) {
+                else if (velocity.y < 0) {
                     alternateInputFont = [UIFont systemFontOfSize:MAX(_alternateInputLabel.font.pointSize - 1.5, _alternateFont.pointSize)];
                     inputFont = [UIFont systemFontOfSize:MIN(_inputLabel.font.pointSize + 1.5, _font.pointSize)];
                     
