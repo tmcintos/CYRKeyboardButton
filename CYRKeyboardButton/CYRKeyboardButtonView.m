@@ -282,7 +282,7 @@
     CGContextSetShadowWithColor(context, CGSizeZero, 0, [[UIColor clearColor] CGColor]);
     CGContextSaveGState(context);
     
-    NSArray *inputOptions = self.button.inputOptions;
+    NSArray *inputOptions = self.button.inputOptionsDisplayNames ?: self.button.inputOptions;
     
     [inputOptions enumerateObjectsUsingBlock:^(NSString *optionString, NSUInteger idx, BOOL *stop) {
         CGRect optionRect = [self.inputOptionRects[idx] CGRectValue];

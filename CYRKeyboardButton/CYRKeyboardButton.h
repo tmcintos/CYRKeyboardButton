@@ -196,6 +196,8 @@ extern NSString *const CYRKeyboardButtonKeyPressedKey;
  */
 @property (nonatomic, strong, nullable) NSArray *inputOptions;
 
+@property (nonatomic, strong, nullable) NSArray *inputOptionsDisplayNames;
+
 /**
  An object that adopts the UIKeyInput protocol. When a key is pressed the key value is automatically inserted via the textInput object.
  @discussion If the textInput object is not the first responder no text will be inserted.

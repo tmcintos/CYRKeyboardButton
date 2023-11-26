@@ -1,6 +1,7 @@
 #CYRKeyboardButton Changelog
 
 ##0.5.x (TBD)
+* Added `inputOptionsDisplayNames` property (default: nil) to allow for input options like ESC or TAB.
 * Added `keyInput` property and deprecated `textInput` property in order to allow operation with receivers conforming to UIKeyInput but not UITextInput.
 (Thanks @anovoselskyi)
 * Added `keyBottomColor` and `keyBottomHighlightedColor` properties (default: nil) to allow an optional key background gradient.
