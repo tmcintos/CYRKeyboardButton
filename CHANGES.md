@@ -1,6 +1,7 @@
 #CYRKeyboardButton Changelog
 
 ##0.5.x (TBD)
+* Changed key `cornerRadius` to 5 to match system keyboard (as of iOS 17).
 * Added UISelectionFeedbackGenerator to match system keyboard behavior.
 * Added `inputOptionsDisplayNames` property (default: nil) to allow for input options like ESC or TAB.
 * Added `keyInput` property and deprecated `textInput` property in order to allow operation with receivers conforming to UIKeyInput but not UITextInput.

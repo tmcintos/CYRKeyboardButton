@@ -401,7 +401,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 {
     switch (_style) {
         case CYRKeyboardButtonStylePhone:
-            _keyCornerRadius = 4.f;
+            _keyCornerRadius = 5.f;
             break;
             
         case CYRKeyboardButtonStyleTablet:
