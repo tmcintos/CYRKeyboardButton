@@ -48,6 +48,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 @property (nonatomic, strong) UILabel *inputLabel;
 @property (nonatomic, strong) CYRKeyboardButtonView *buttonView;
 @property (nonatomic, strong) CYRKeyboardButtonView *expandedButtonView;
+@property (nonatomic, strong) UISelectionFeedbackGenerator *selectionFeedbackGenerator;
 
 @property (nonatomic, assign) CYRKeyboardButtonPosition position;
 @property (nonatomic, assign) BOOL useAlternateInput;
@@ -352,7 +353,7 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
             
             NSUInteger index = [_inputOptions indexOfObject:_input];
             
-            [expandedButtonView selectInputAt:index != NSNotFound ? index : -1];
+            [expandedButtonView selectInputAt:index != NSNotFound ? index : NSNotFound];
             expandedButtonView.heightReduction = self.calloutHeightReduction;
             expandedButtonView.useNarrowerOptionWidth = self.useNarrowerOptionWidth;
             
@@ -362,9 +363,14 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
             [[NSNotificationCenter defaultCenter] postNotificationName:CYRKeyboardButtonDidShowExpandedInputNotification object:self];
             
             [self hideInputView];
+
+            self.selectionFeedbackGenerator = [UISelectionFeedbackGenerator new];
+            [self.selectionFeedbackGenerator prepare];
         }
     } else if (recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateEnded) {
         if (self.panGestureRecognizer.state != UIGestureRecognizerStateRecognized) {
+            self.selectionFeedbackGenerator = nil;
+            
             [self handleTouchUpInside];
         }
     }
@@ -387,6 +393,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
     
     [self.expandedButtonView removeFromSuperview];
     self.expandedButtonView = nil;
+    
+    self.selectionFeedbackGenerator = nil;
 }
 
 - (void)updateDisplayStyle
@@ -619,7 +627,13 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
         
         if (updateExpandedView) {
             CGPoint location = [recognizer locationInView:self.superview];
+            NSInteger oldIndex = self.expandedButtonView.selectedInputIndex;
             [self.expandedButtonView updateSelectedInputIndexForPoint:location];
+            NSInteger newIndex = self.expandedButtonView.selectedInputIndex;
+            if ( newIndex != NSNotFound && oldIndex != newIndex ) {
+                [self.selectionFeedbackGenerator selectionChanged];
+                [self.selectionFeedbackGenerator prepare];
+            }
         }
         else {
             [self hideExpandedInputView];

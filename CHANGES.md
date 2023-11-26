@@ -1,6 +1,7 @@
 #CYRKeyboardButton Changelog
 
 ##0.5.x (TBD)
+* Added UISelectionFeedbackGenerator to match system keyboard behavior.
 * Added `inputOptionsDisplayNames` property (default: nil) to allow for input options like ESC or TAB.
 * Added `keyInput` property and deprecated `textInput` property in order to allow operation with receivers conforming to UIKeyInput but not UITextInput.
 (Thanks @anovoselskyi)

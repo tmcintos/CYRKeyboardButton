@@ -55,7 +55,7 @@
     if (self) {
         _button = button;
         _type = type;
-        _selectedInputIndex = -1;
+        _selectedInputIndex = NSNotFound;
         
         self.heightReduction = 0.f;
         self.useNarrowerOptionWidth = NO;
