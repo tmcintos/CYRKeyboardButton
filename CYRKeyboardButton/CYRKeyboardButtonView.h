@@ -40,6 +40,8 @@ typedef NS_ENUM(NSUInteger, CYRKeyboardButtonViewType) {
 
 @class CYRKeyboardButton;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CYRKeyboardButtonView : UIView
 
 @property (nonatomic, readonly) CYRKeyboardButtonViewType type;
@@ -52,3 +54,5 @@ typedef NS_ENUM(NSUInteger, CYRKeyboardButtonViewType) {
 - (void)selectInputAt:(NSUInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

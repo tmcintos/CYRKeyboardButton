@@ -41,6 +41,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 
 #define kMinimumInputViewShowingTime 0.125f
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CYRKeyboardButton () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIStackView* stackView;
@@ -64,6 +66,8 @@ NSString *const CYRKeyboardButtonKeyPressedKey = @"CYRKeyboardButtonKeyPressedKe
 @property (nonatomic, assign) CGFloat keyCornerRadius UI_APPEARANCE_SELECTOR;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 @implementation CYRKeyboardButton
 
