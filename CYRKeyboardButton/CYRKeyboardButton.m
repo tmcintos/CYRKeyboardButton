@@ -92,6 +92,16 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
+- (CGSize)intrinsicContentSize {
+    NSDirectionalEdgeInsets buttonInsets = UIButtonConfiguration.borderedButtonConfiguration.contentInsets;
+    CGSize contentSize = [self.stackView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+
+    contentSize.width += buttonInsets.leading + buttonInsets.trailing;
+    contentSize.height += buttonInsets.top + buttonInsets.bottom;
+
+    return contentSize;
+}
+
 - (void)commonInit
 {
     switch ([UIDevice currentDevice].userInterfaceIdiom) {
