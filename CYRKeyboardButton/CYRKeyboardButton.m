@@ -48,9 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIStackView* stackView;
 @property (nonatomic, strong) UILabel *alternateInputLabel;
 @property (nonatomic, strong) UILabel *inputLabel;
-@property (nonatomic, strong) CYRKeyboardButtonView *buttonView;
-@property (nonatomic, strong) CYRKeyboardButtonView *expandedButtonView;
-@property (nonatomic, strong) UISelectionFeedbackGenerator *selectionFeedbackGenerator;
+@property (nonatomic, strong, nullable) CYRKeyboardButtonView *buttonView;
+@property (nonatomic, strong, nullable) CYRKeyboardButtonView *expandedButtonView;
+@property (nonatomic, strong, nullable) UISelectionFeedbackGenerator *selectionFeedbackGenerator;
 
 @property (nonatomic, assign) CYRKeyboardButtonPosition position;
 @property (nonatomic, assign) BOOL useAlternateInput;
