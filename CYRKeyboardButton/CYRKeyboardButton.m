@@ -565,16 +565,18 @@ NS_ASSUME_NONNULL_END
 - (void)_handlePanning:(UIPanGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled) {
-        if (self.expandedButtonView && self.expandedButtonView.selectedInputIndex != NSNotFound) {
-            NSString *inputOption = self.inputOptions[self.expandedButtonView.selectedInputIndex];
-            
-            [self insertText:inputOption];
-        }
-        else if (self.alternateInput) {
-            [self handleInput:_useAlternateInput ? self.alternateInput : self.input];
-        }
-        else if (!self.expandedButtonView.selectedInputIndex || self.expandedButtonView.selectedInputIndex == NSNotFound) {
-            [self handleInput:self.input];
+        if (self.expandedButtonView) {
+            if (self.expandedButtonView && self.expandedButtonView.selectedInputIndex != NSNotFound) {
+                NSString *inputOption = self.inputOptions[self.expandedButtonView.selectedInputIndex];
+                
+                [self insertText:inputOption];
+            }
+            else if (self.alternateInput) {
+                [self handleInput:_useAlternateInput ? self.alternateInput : self.input];
+            }
+            else if (!self.expandedButtonView.selectedInputIndex || self.expandedButtonView.selectedInputIndex == NSNotFound) {
+                [self handleInput:self.input];
+            }
         }
         
         // Animate back the input labels back to their default states
@@ -587,7 +589,7 @@ NS_ASSUME_NONNULL_END
         
         [self hideExpandedInputView];
     } else {
-        BOOL updateExpandedView = YES;
+        BOOL updateExpandedView = [recognizer locationInView:self].y <= (CGRectGetMaxY(self.bounds) + CGRectGetHeight(self.bounds));
         
         if (_alternateInputLabel) {
             BOOL locationInOptions = CGRectContainsPoint(self.expandedButtonView.bounds, [recognizer locationInView:self.expandedButtonView]);
