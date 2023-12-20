@@ -699,7 +699,7 @@ NS_ASSUME_NONNULL_END
     CGFloat shadowBlurRadius = 0;
     
     UIBezierPath *roundedRectanglePath =
-    [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 1) cornerRadius:self.keyCornerRadius];
+    [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height - 1) cornerRadius:self.keyCornerRadius];
     CGContextSaveGState(context);
     if (self.showShadow) {
         CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
