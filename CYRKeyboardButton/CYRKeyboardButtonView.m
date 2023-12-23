@@ -41,7 +41,7 @@
 @property (nonatomic, assign) CYRKeyboardButtonViewType type;
 @property (nonatomic, assign) CYRKeyboardButtonPosition expandedPosition;
 @property (nonatomic, strong) NSMutableArray *inputOptionRects;
-@property (nonatomic, assign) NSInteger selectedInputIndex;
+@property (nonatomic, strong, nullable) UISelectionFeedbackGenerator *selectionFeedbackGenerator;
 
 @end
 
@@ -56,6 +56,8 @@
         _button = button;
         _type = type;
         _selectedInputIndex = NSNotFound;
+        _selectionFeedbackGenerator = [UISelectionFeedbackGenerator new];
+        [_selectionFeedbackGenerator prepare];
         
         self.heightReduction = 0.f;
         self.useNarrowerOptionWidth = NO;
@@ -86,7 +88,12 @@
 #pragma mark - Public
 
 - (void)selectInputAt:(NSUInteger)index {
-    _selectedInputIndex = index;
+    if ( index != _selectedInputIndex ) {
+        _selectedInputIndex = index;
+        [self setNeedsDisplay];
+        [_selectionFeedbackGenerator selectionChanged];
+        [_selectionFeedbackGenerator prepare];
+    }
 }
 
 - (void)updateSelectedInputIndexForPoint:(CGPoint)point
@@ -108,10 +115,7 @@
         }
     }];
     
-    if (self.selectedInputIndex != selectedInputIndex) {
-        self.selectedInputIndex = selectedInputIndex;
-        [self setNeedsDisplay];
-    }
+    [self selectInputAt:selectedInputIndex];
 }
 
 #pragma mark - Drawing
