@@ -632,7 +632,7 @@ NS_ASSUME_NONNULL_END
         }
         
         if (updateExpandedView) {
-            CGPoint location = [recognizer locationInView:self.superview];
+            CGPoint location = [recognizer locationInView:nil];
             [self.expandedButtonView updateSelectedInputIndexForPoint:location];
         }
         else {

@@ -98,24 +98,41 @@
 
 - (void)updateSelectedInputIndexForPoint:(CGPoint)point
 {
-    __block NSInteger selectedInputIndex = NSNotFound;
+    __block NSInteger selectedInputIndex = 0;
     
-    CGRect testRect = CGRectMake(point.x, point.y, 0, 0);
-    
-    CGPoint location = [self convertRect:testRect fromView:self.button.superview].origin;
-    
-    [self.inputOptionRects enumerateObjectsUsingBlock:^(NSValue *rectValue, NSUInteger idx, BOOL *stop) {
-        CGRect keyRect = [rectValue CGRectValue];
-        CGRect infiniteKeyRect = CGRectMake(CGRectGetMinX(keyRect), 0, CGRectGetWidth(keyRect), NSIntegerMax);
-        infiniteKeyRect = CGRectInset(infiniteKeyRect, -3, 0);
+    CGPoint location = [self convertRect:CGRectMake(point.x, point.y, 0, 0) fromView:nil].origin;
+    CGRect bounds = self.expandedInputViewPath.bounds;
+    CGFloat height = CGRectGetHeight(bounds);
+    CGFloat width = CGRectGetWidth(bounds);
+    CGRect touchBoundsRect = CGRectMake(CGRectGetMinX(bounds) - height/2,
+                                        CGRectGetMinY(bounds) - height/2,
+                                        height + width,
+                                        height + height);
+    BOOL inBounds = CGRectContainsPoint(touchBoundsRect, location);
+
+    if ( inBounds ) {
+        CGRect leftTouchBounds, rightTouchBounds;
+        NSArray * inputOptionRects = self.inputOptionRects;
+        NSUInteger count = inputOptionRects.count;
         
-        if (CGRectContainsPoint(infiniteKeyRect, location)) {
-            selectedInputIndex = idx;
-            *stop = YES;
-        }
-    }];
-    
-    [self selectInputAt:selectedInputIndex];
+        CGRectDivide(touchBoundsRect, &leftTouchBounds, &rightTouchBounds, width / 2, CGRectMinXEdge);
+        
+        selectedInputIndex = CGRectContainsPoint(_expandedPosition == CYRKeyboardButtonPositionRight ? leftTouchBounds : rightTouchBounds, location) ? 0 : count - 1;
+        
+        [inputOptionRects enumerateObjectsUsingBlock:^(NSValue *rectValue, NSUInteger idx, BOOL *stop) {
+            CGRect keyRect = [rectValue CGRectValue];
+            CGRect infiniteKeyRect = CGRectMake(CGRectGetMinX(keyRect), 0, CGRectGetWidth(keyRect), NSIntegerMax);
+            infiniteKeyRect = CGRectInset(infiniteKeyRect, -3, 0);
+            
+            if (CGRectContainsPoint(infiniteKeyRect, location)) {
+                selectedInputIndex = idx;
+                *stop = YES;
+            }
+        }];
+    }
+
+    if ( selectedInputIndex != NSNotFound )
+        [self selectInputAt:selectedInputIndex];
 }
 
 #pragma mark - Drawing

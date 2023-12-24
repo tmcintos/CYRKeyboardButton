@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL useNarrowerOptionWidth;
 
 - (instancetype)initWithKeyboardButton:(CYRKeyboardButton *)button type:(CYRKeyboardButtonViewType)type;
-- (void)updateSelectedInputIndexForPoint:(CGPoint)point;
+- (void)updateSelectedInputIndexForPoint:(CGPoint)point; // window coordinates
 - (void)selectInputAt:(NSUInteger)index;
 
 @end
