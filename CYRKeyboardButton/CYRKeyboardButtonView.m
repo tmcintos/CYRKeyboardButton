@@ -49,7 +49,7 @@
 
 #pragma mark - UIView
 
-- (instancetype)initWithKeyboardButton:(CYRKeyboardButton *)button type:(CYRKeyboardButtonViewType)type;
+- (instancetype)initWithKeyboardButton:(CYRKeyboardButton *)button type:(CYRKeyboardButtonViewType)type
 {
     self = [super initWithFrame:UIScreen.mainScreen.bounds];
     if (self) {
@@ -88,7 +88,10 @@
 #pragma mark - Public
 
 - (void)selectInputAt:(NSUInteger)index {
-    if ( index != _selectedInputIndex ) {
+    if ( index == (NSUInteger)NSNotFound )
+        [NSException raise:NSInvalidArgumentException format:@"invalid index: %lu", (unsigned long)index];
+
+    if ( index != (NSUInteger)_selectedInputIndex ) {
         _selectedInputIndex = index;
         [self setNeedsDisplay];
         [_selectionFeedbackGenerator selectionChanged];
@@ -308,8 +311,8 @@
     [inputOptions enumerateObjectsUsingBlock:^(NSString *optionString, NSUInteger idx, BOOL *stop) {
         CGRect optionRect = [self.inputOptionRects[idx] CGRectValue];
         
-        BOOL selected = (idx == self.selectedInputIndex);
-        
+        BOOL selected = (idx == (NSUInteger)self.selectedInputIndex);
+
         if (selected) {
             // Draw selection background
             if (self.button.style == CYRKeyboardButtonStylePhone) {
