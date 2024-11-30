@@ -365,8 +365,10 @@ NS_ASSUME_NONNULL_END
             CYRKeyboardButtonView *expandedButtonView = [[CYRKeyboardButtonView alloc] initWithKeyboardButton:self type:CYRKeyboardButtonViewTypeExpanded];
             
             NSUInteger index = [_inputOptions indexOfObject:_input];
+
+            NSAssert2(index != NSNotFound, @"input=%@ not found in inputOptions=%@", _input, _inputOptions);
             
-            [expandedButtonView selectInputAt:index != NSNotFound ? index : NSNotFound];
+            [expandedButtonView selectInputAt:index];
             expandedButtonView.heightReduction = self.calloutHeightReduction;
             expandedButtonView.useNarrowerOptionWidth = self.useNarrowerOptionWidth;
             

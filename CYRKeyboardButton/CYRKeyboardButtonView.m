@@ -88,7 +88,7 @@
 #pragma mark - Public
 
 - (void)selectInputAt:(NSUInteger)index {
-    if ( index == (NSUInteger)NSNotFound )
+    if ( index == (NSUInteger)NSNotFound || index > (NSUInteger)NSIntegerMax )
         [NSException raise:NSInvalidArgumentException format:@"invalid index: %lu", (unsigned long)index];
 
     if ( index != (NSUInteger)_selectedInputIndex ) {
