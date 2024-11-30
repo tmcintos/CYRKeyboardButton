@@ -41,7 +41,7 @@
         keyboardButton.translatesAutoresizingMaskIntoConstraints = NO;
         keyboardButton.alternateInput = alts[idx];
         keyboardButton.input = keyString;
-        keyboardButton.inputOptions = @[@"A", @"B", @"C", @"D"];
+        keyboardButton.inputOptions = @[ keyString, @"A", @"B", @"C", @"D"];
         keyboardButton.keyInput = self.textView;
         if ( [keyString isEqualToString:@"0"] ) {
             keyboardButton.keyColor = UIColor.systemGray3Color;
