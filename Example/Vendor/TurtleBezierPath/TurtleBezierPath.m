@@ -17,7 +17,7 @@
 {
     [ super encodeWithCoder:aCoder ];
     
-    [ aCoder encodeFloat:self.bearing forKey:@"bearing" ];
+    [ aCoder encodeDouble:self.bearing forKey:@"bearing" ];
     [ aCoder encodeBool:self.penUp forKey:@"penUp" ];
 }
 
@@ -49,7 +49,7 @@
     CGFloat phase;
     NSInteger count;
     [ self getLineDash:nil count:&count phase:&phase ];
-    CGFloat *lineDash = malloc( count * sizeof( CGFloat ));
+    CGFloat *lineDash = malloc((size_t)count * sizeof( CGFloat ));
     [ self getLineDash:lineDash count:&count phase:&phase ];
     [ clone setLineDash:lineDash count:count phase:phase ];
     free( lineDash );
@@ -173,7 +173,7 @@ static inline CGFloat radians (CGFloat degrees) {return degrees * M_PI / 180.0;}
 {
     CGFloat bearingInRadians = radians( bearing );
     
-    CGPoint vector = CGPointMake( radius * sinf( bearingInRadians ), -radius * cosf( bearingInRadians ));
+    CGPoint vector = CGPointMake( radius * sin( bearingInRadians ), -radius * cos( bearingInRadians ));
     
     return CGPointMake( origin.x + vector.x, origin.y + vector.y );
 }
